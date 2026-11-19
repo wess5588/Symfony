@@ -25,10 +25,18 @@
                 <td>{{ service.description }}</td>
                 <td>{{ service.prix }}</td>
                 <td>{{ service.duree }}</td>
-                <td>{{ service.image }}</td>
+                <td>
+                    {% if service.image %}
+                        <img src="{{ asset('uploads/services/' ~ service.image) }}" alt="{{ service.titre }}" style="max-width: 100px;">
+                    {% else %}
+                        <span>Aucune image</span>
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{{ path('app_service_show', {'id': service.id}) }}">show</a>
-                    <a href="{{ path('app_service_edit', {'id': service.id}) }}">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_service_edit', {'id': service.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -39,5 +47,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_service_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_service_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
